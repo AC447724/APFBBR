@@ -8,9 +8,7 @@ $$$$$$$  |$$ | /    $$ |$$ |  $$ |$$    $$ |      $$ |  $$ | /    $$ |$$ |$$ |
 $$ |__$$ |$$ |/$$$$$$$ |$$ \__$$ |$$$$$$$$/       $$ |__$$ |/$$$$$$$ |$$ |$$ |
 $$    $$/ $$ |$$    $$ |$$    $$ |$$       |      $$    $$/ $$    $$ |$$ |$$ |
 $$$$$$$/  $$/  $$$$$$$/  $$$$$$$/  $$$$$$$/       $$$$$$$/   $$$$$$$/ $$/ $$/  Exploit ( Auto block )
-By Dgegesg
-Portfoilo
-https://dgegesgportfolio.static.domains/Index.html
+By C5xk owner of vercel v5
 ]]
 local w:number,rep,plr,run,p=wait,game.ReplicatedStorage,game.Players.LocalPlayer or game.Players.PlayerAdded:Wait(),game["Run Service"],{}
 function findfistchild(i:'instance',s:string)for _,v in i:GetChildren()do if(v.Name==s)then return v end run.RenderStepped:Wait(0) end return false end
@@ -79,7 +77,7 @@ function Detect()
 end
 
 
-function Block() 
+function Shoot() 
         Remote:Fire()
         p[12].BackgroundColor3=Color3.new(1, 0.219608, 0.219608)
         p[6].Text='<b>Distance [Block!]</b>'
