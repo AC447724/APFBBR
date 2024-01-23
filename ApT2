@@ -1,0 +1,231 @@
+shared.config = {
+
+    mode = 'Hold', -- // Hold , Toggle , Always \\ --
+
+    deflect_type = 'Remote', -- // Key Press , Remote \\ --
+
+    adjustment = 3.7, -- // Keep this value 3 - 4 \\ --
+
+    notifications = true,
+
+    keybind = Enum.KeyCode.E
+
+   }
+
+   
+
+   local UserInputService = game:GetService("UserInputService")
+
+   local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+   
+
+   local LocalPlayer = game:GetService("Players").LocalPlayer
+
+   local Balls = game:GetService("Workspace").Balls
+
+   
+
+   local IsTargeted = false
+
+   local CanHit = false
+
+   
+
+   function Target(Character)
+
+    Character.ChildAdded:Connect(function(child)
+
+      if child.Name == "Highlight" then
+
+        IsTargeted = true
+
+      end
+
+    end)
+
+    Character.ChildRemoved:Connect(function(child)
+
+      if child.Name == "Highlight" then
+
+        IsTargeted = false
+
+      end
+
+    end)
+
+   end
+
+   
+
+   Target(LocalPlayer.Character or LocalPlayer.CharacterAdded:wait())
+
+   LocalPlayer.CharacterAdded:Connect(Target)
+
+   
+
+   function DetectBall()
+
+    local Ball = (#Balls:GetChildren() > 0 and Balls:GetChildren()[1]) or (Balls.ChildAdded:Wait() and Balls:GetChildren()[1])
+
+   
+
+    local BallVelocity = Ball.Velocity.Magnitude
+
+    local BallPosition = Ball.Position
+
+   
+
+    local PlayerPosition = LocalPlayer.Character.HumanoidRootPart.Position
+
+    local PlayerVelocity = LocalPlayer.Character.HumanoidRootPart.Velocity.Magnitude
+
+   
+
+    local Distance = (BallPosition - PlayerPosition).Magnitude
+
+    local Adjustment = BallVelocity * (game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000)
+
+   
+
+    Distance -= Adjustment
+
+    Distance -= -shared.config.adjustment
+
+   
+
+    local Hit = Distance / BallVelocity
+
+   
+
+    if Hit <= .5 then
+
+      return true
+
+    end
+
+    return false
+
+   end
+
+   
+
+   function DeflectBall()
+
+    if IsTargeted and DetectBall() then
+
+      if shared.config.deflect_type == 'Key Press' then
+
+        keypress(0x46)
+
+      else
+
+        ReplicatedStorage.Remotes.ParryButtonPress:Fire()
+
+      end
+
+    end
+
+   end
+
+   
+
+   UserInputService.InputBegan:Connect(function(Input, IsTyping)
+
+    if IsTyping then return end
+
+    if shared.config.mode == 'Toggle' and Input.KeyCode == shared.config.keybind then
+
+      CanHit = not CanHit
+
+    if shared.config.notifications then
+
+    game:GetService("StarterGui"):SetCore("SendNotification",{
+
+    Title = "Blade Ball",
+
+    Text = CanHit and 'Enabled!' or 'Disabled!',
+
+    })
+
+    end
+
+    elseif shared.config.mode == 'Hold' and Input.KeyCode == shared.config.keybind and shared.config.notifications then
+
+      game:GetService("StarterGui"):SetCore("SendNotification",{
+
+        Title = "Blade Ball",
+
+        Text = 'Holding keybind!',
+
+      })
+
+    end
+
+   end)
+
+   
+
+   UserInputService.InputEnded:Connect(function(Input, IsTyping)
+
+    if IsTyping then return end
+
+    if shared.config.mode == 'Hold' and Input.KeyCode == shared.config.keybind and shared.config.notifications then
+
+      game:GetService("StarterGui"):SetCore("SendNotification",{
+
+        Title = "Blade Ball",
+
+        Text = 'No longer holding keybind!',
+
+      })
+
+    end
+
+   end)
+
+   
+
+   game:GetService('RunService').PostSimulation:Connect(function()
+
+    if shared.config.mode == 'Hold' and UserInputService:IsKeyDown(shared.config.keybind) then
+
+      DeflectBall()
+
+    elseif shared.config.mode == 'Toggle' and CanHit then
+
+      DeflectBall()
+
+    elseif shared.config.mode == 'Always' then
+
+      DeflectBall()
+
+    end
+
+   end)
+
+   
+
+   game:GetService("StarterGui"):SetCore("SendNotification",{
+
+      Title = "Blade Ball Auto Parry Loaded",
+
+      Text = 'By c5xk and SL12',
+
+   })
+
+
+
+local AkaliNotif = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/Dynissimo/main/Scripts/AkaliNotif.lua"))();
+
+local Notify = AkaliNotif.Notify;
+
+Notify({
+
+Description = "Mfs who left the team";
+
+Title = "Everyone else except c5xk and SL12 Keybind is also E";
+
+Duration = 10;
+
+});
