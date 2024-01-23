@@ -18,7 +18,7 @@ $$    $$/ $$ |$$    $$ |$$    $$ |$$       |      $$    $$/ $$    $$ |$$ |$$ |
 
 $$$$$$$/  $$/  $$$$$$$/  $$$$$$$/  $$$$$$$/       $$$$$$$/   $$$$$$$/ $$/ $$/  Exploit ( Auto block )
 
-By Dgegesg
+By SL12
 
 Portfoilo
 
@@ -160,7 +160,7 @@ end
 
 
 
-function Block() 
+function Shoot() 
 
         Remote:Fire()
 
